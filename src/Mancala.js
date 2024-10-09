@@ -9,25 +9,25 @@ class Mancala extends React.Component {
         super(props);
 
         this.state ={
-            msg: '',
             data: props
         };
     }
     render() {
         const MAX_PITS = 6;
-        let user1Pits = [], user2Pits = [];
+        let player1Pits = [], player2Pits = [];
         for (let i = 0; i < MAX_PITS; i++) {
-            user1Pits.push(<Pit config={{user: 1, idx: i}}/>);
-            user2Pits.push(<Pit config={{user: 2, idx: i}}/>);
+            player1Pits.push(<Pit config={{player: 1, idx: i}}/>);
+            player2Pits.push(<Pit config={{player: 2, idx: i}}/>);
         }
-        user2Pits.reverse();
+        // pit order goes counter clockwise, need to reverse the other side
+        player2Pits.reverse();
         return <div id="mancala-game">
-                    <Store/>
+                    <Store config={{player: 2}}/>
                     <div className="pit-container">
-                        <ul>{user2Pits}</ul>
-                        <ul>{user1Pits}</ul>
+                        <ul>{player2Pits}</ul>
+                        <ul>{player1Pits}</ul>
                     </div>
-                    <Store/>
+                    <Store config={{player: 1}}/>
                 </div>;
     }
 }

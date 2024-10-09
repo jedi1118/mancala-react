@@ -1,7 +1,8 @@
 #mancala-game {
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     /* min-width: 820px; */
     font-size: 1rem;
+    color: #000;
 }
 .pit-container {
     float: left;
@@ -12,4 +13,9 @@ ul {
     margin: 0;
     /* display: inline; */
 }
-
+.player1 {
+    background-color: #ccffcc;
+}
+.player2 {
+    background-color: #99ddff;
+}

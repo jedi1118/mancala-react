@@ -6,12 +6,12 @@ class Store extends React.Component {
         super(props);
 
         this.state ={
-            msg: '',
-            data: props
+            config: props.config
         };
     }
     render() {
-        return <div className="store">Store</div>
+        console.log('store', this.state.config.player);
+        return <div className={`store player${this.state.config.player}`}>Store={JSON.stringify(this.state.config)}</div>
     }
 }
 
