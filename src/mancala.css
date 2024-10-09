@@ -1,0 +1,15 @@
+#mancala-game {
+    border: 1px solid #ccc;
+    /* min-width: 820px; */
+    font-size: 1rem;
+}
+.pit-container {
+    float: left;
+}
+ul {
+    height: 100px;
+    padding: 0;
+    margin: 0;
+    /* display: inline; */
+}
+

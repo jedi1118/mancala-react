@@ -1,0 +1,6 @@
+.store {
+    width: 100px;
+    height: 200px;
+    border: 1px solid red;
+    float: left;
+}
