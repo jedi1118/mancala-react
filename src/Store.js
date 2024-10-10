@@ -11,7 +11,7 @@ class Store extends React.Component {
     }
     render() {
         console.log('store', this.state.config.player);
-        return <div className={`store player${this.state.config.player}`}>Store={JSON.stringify(this.state.config)}</div>
+        return <div className={`store player${this.state.config.player}`}>{JSON.stringify(this.state.config)}</div>
     }
 }
 

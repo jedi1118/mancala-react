@@ -13,9 +13,9 @@ ul {
     margin: 0;
     /* display: inline; */
 }
-.player1 {
+.player0 {
     background-color: #ccffcc;
 }
-.player2 {
+.player1 {
     background-color: #99ddff;
 }
