@@ -1,6 +1,6 @@
 #mancala-game {
     /* border: 1px solid #ccc; */
-    /* min-width: 820px; */
+    min-width: 820px;
     font-size: 1rem;
     color: #000;
 }

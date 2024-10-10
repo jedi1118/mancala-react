@@ -8,10 +8,15 @@ class Pit extends React.Component {
         this.state = {
             config: props.config
         };
-        console.log('1@@@', this.state.config);
     }
+    handlePitClick = () => {
+        this.props.click(this.state.config);
+    }
+    
     render() {
-        return <li className={`pit player${this.state.config.player}`}><div>{JSON.stringify(this.state.config)}</div></li>
+        return <li 
+            className={`pit player${this.state.config.player}`}
+            ><div onClick={this.handlePitClick}>{this.state.config.seeds}</div></li>
     }
 }
 

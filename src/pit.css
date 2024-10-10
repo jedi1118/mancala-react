@@ -8,4 +8,5 @@
 .pit div {
     height: 100%;
     word-wrap: break-word;
+    font-size: 2em;
 }
