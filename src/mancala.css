@@ -3,6 +3,11 @@
     min-width: 820px;
     font-size: 1rem;
     color: #000;
+    clear: both;
+}
+.holding-area {
+    clear: both;
+    height: 150px;
 }
 .pit-container {
     float: left;

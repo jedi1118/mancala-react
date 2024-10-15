@@ -10,7 +10,7 @@ class Store extends React.Component {
         };
     }
     render() {
-        console.log('store', this.state.config.player);
+        // console.log('store', this.state.config.player);
         return <div className={`store player${this.state.config.player}`}>{this.state.config.seeds}</div>
     }
 }
