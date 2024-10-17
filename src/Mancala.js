@@ -84,7 +84,7 @@ class Mancala extends React.Component {
     //     this.setState({data: aMove});
     // }
     showMoves() {
-        this.intervalRef = setInterval( ()=>{
+        let intervalRef = setInterval( ()=>{
             if (this.moves.length > 0) {
                 const aMove = this.moves.shift();
                 // display the move
@@ -95,10 +95,11 @@ class Mancala extends React.Component {
             }
             if (this.moves.length === 0) {
                 console.log('showMoves: clear', this.moves.length);
-                clearInterval(this.intervalRef);
+                clearInterval(intervalRef);
                 return;
             }
-        }, 800);
+        }, 1800);
+        this.setState({intervalRef: intervalRef});
     }
     pitClicked = (pit) => {
         console.log('pitClicked', this, pit);
