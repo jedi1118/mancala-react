@@ -19,7 +19,7 @@ class Mancala extends React.Component {
             [this.PLAYER_1]: [],
             [this.PLAYER_2]: []
         };// array, so we can access player data by player id
-
+        this.intervalRef = null;
         this.state = {
             active: 0, // set active player
             message: '',
@@ -99,7 +99,6 @@ class Mancala extends React.Component {
                 return;
             }
         }, 1800);
-        this.setState({intervalRef: intervalRef});
     }
     pitClicked = (pit) => {
         console.log('pitClicked', this, pit);
