@@ -11,7 +11,7 @@ class Store extends React.Component {
     }
     render() {
         // console.log('store', this.state.config.player);
-        return <div className={`store player${this.state.config.player}`}>{this.state.config.seeds}</div>
+        return <div id={this.props.config.key} className={`store player${this.props.config.player}`}>{this.props.config.seeds}</div>
     }
 }
 

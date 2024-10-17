@@ -98,7 +98,7 @@ class Mancala extends React.Component {
                 clearInterval(this.intervalRef);
                 return;
             }
-        }, 1000);
+        }, 800);
     }
     pitClicked = (pit) => {
         console.log('pitClicked', this, pit);
@@ -130,38 +130,33 @@ class Mancala extends React.Component {
             // 2. a store, and belong to active player
             // TODO: create steps for each pit change, then play it back with a delay
             let pit = stateCopy[playerPitList[idx]];
-            if (!pit.isStore || (pit.isStore && pit.player === this.stateCopy.active)) {
+            if (!pit.isStore || (pit.isStore && pit.player === stateCopy.active)) {
                 pit.seeds++;
                 seedsInHand--;
                 // add to moves data
                 this.addMove(pit.key, pit.seeds, seedsInHand);
-                console.log('-> place seed:', seedsInHand, ' pit:', pit, ' moves:', this.moves[this.moves.length-1]);
+                // console.log('-> place seed:', seedsInHand, ' pit:', pit, ' moves:', this.moves[this.moves.length-1]);
             }
-            // when seeds in-hand are empty, pickup all seeds from current pit again 
-            // if (seedsInHand === 0) {
-            //     seedsInHand = playerPitList[idx].seeds;
-            //     console.log('-> pickup seed:', seedsInHand);
-            // }
+            // when seeds in-hand are empty and pit in on active plater side,
+            // pickup all seeds from current pit again 
+            if (seedsInHand === 0 && pit.player === stateCopy.active) {
+                seedsInHand = pit.seeds;
+                pit.seeds = 0;
+                // add to moves data
+                this.addMove(pit.key, pit.seeds, seedsInHand);
+                console.log('-> pickup seed:', seedsInHand);
+            }
             idx++;
         }
-        // TODO: once finished turn, play back moves 1 by 1
-        // create a copy of all pits
-        // let dataCopy = Object.assign({}, this.state.playerPitList);
-        // //let side = playerPitList[0].player;
-        // dataCopy[side] = playerPitList;
-        // // update state with new pits data
-        // this.setState({data: dataCopy});
+        console.log('-> at end of pits: in-hand', seedsInHand, ' next idx:', idx);
      
         // still have seeds in-hand, play other side of pits
-        // if (seedsInHand > 0) {
-        //     let otherSide = this.state.active+1;
-        //     if (otherSide > 1) {
-        //         otherSide /= 2;
-        //     }
-        //     let otherSidePits = Object.assign({}, this.state.playerPitList[otherSide]);
-        //     console.log('    switch side:', ' side:', otherSide, ' seedsInHand=', seedsInHand, );
-        //     this.playTurn(seedsInHand, otherSidePits, 0);
-        //}
+        if (seedsInHand > 0) {
+            const otherPlayer = this.getOtherPlayer();
+            console.log('    switch side:', ' side:', otherPlayer, ' seedsInHand=', seedsInHand, );
+            //start at first pit when switch side, counter clockwise
+            this.playTurn(stateCopy, seedsInHand, otherPlayer, 0);
+        }
         // this.setState({holding: seedsInHand});
         this.showMoves();
     }
@@ -198,7 +193,7 @@ class Mancala extends React.Component {
                 <div className="message player1">Message:{this.state.message}</div>
                 <div className="holding-area  player1">In-Hand:{this.PLAYER_2 === this.state.active ? this.state.holding: ''}</div>
                 <div>
-                    <Store config={this.state[store1Key]}/>
+                    <Store config={this.state[store2Key]}/>
                     <div className="pit-container">
                         {/* <ul>
                             {
@@ -213,7 +208,7 @@ class Mancala extends React.Component {
                             }
                         </ul> */}
                     </div>
-                    <Store config={this.state[store2Key]}/>
+                    <Store config={this.state[store1Key]}/>
                 </div>
                 <div className="holding-area player0">In-Hand:{this.PLAYER_1 === this.state.active ? this.state.holding: ''}</div>
                 <div className="message player0">Message:{this.state.message}</div>

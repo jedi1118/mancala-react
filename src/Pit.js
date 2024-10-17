@@ -26,7 +26,7 @@ class Pit extends React.Component {
     render() {
         return <li 
             className={`pit player${this.props.config.player}`}
-            ><div onClick={this.handlePitClick}>{this.props.config.seeds}</div></li>
+            ><div id={this.props.config.key} onClick={this.handlePitClick}>{this.props.config.seeds}</div></li>
     }
 }
 
