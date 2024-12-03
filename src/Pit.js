@@ -2,9 +2,10 @@ import React from 'react';
 import './pit.css';
 
 function Pit({config, click}) {
-    function handlePitClick() {
-        click(config);
-    }
+    // console.log('Pit=', config, click);
+    // function handlePitClick() {
+    //     click(config);
+    // }
     // componentDidUpdate(prevProps, prevState) {
     //     console.log('###############', prevProps, prevState);
     // }
@@ -18,7 +19,7 @@ function Pit({config, click}) {
     // }
     return (
         <li className={`pit player${config.player}`}>
-            <div id={config.key} onClick={handlePitClick}>{config.seeds}</div>
+            <div id={config.key} onClick={() =>{click(config)}}>{config.seeds}</div>
         </li>
     );
 }
