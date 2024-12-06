@@ -70,7 +70,7 @@ function Mancala() {
 
     // @pit: pit data to update, i.e { key: 'p0-1', seeds: 5}
     // @seedsHolding: top level property in gameState.seedsInHand
-    function addMove(pit, seedsHolding) {
+    function playSingleMove(pit, seedsHolding) {
         // create move data
         // TODO: likely we will not need all these data, maybe 'seeds' should be enough
         // pit data is not nested, use Object.assign to make shallow copy is safe here
@@ -87,7 +87,7 @@ function Mancala() {
             seedsInHand: seedsHolding,// seeds in hand
             [pit.key]: pitCopy// new data for the pit
         });
-        // console.log('addMove', moveList[moveList.length-1]);
+        // console.log('playSingleMove', moveList[moveList.length-1]);
         return {};//newState;
     }
     // removeMove() {
@@ -123,21 +123,11 @@ function Mancala() {
         // pickup all seeds in the pit
         // set pit to 0, and seeds in-hand value
         emptyPitAndPlay(pit.key)
-        // let seedsInHand = pit.seeds;// seeds in in-hand
-        // let stateCopy = JSON.parse(JSON.stringify(gameStateRef.current));
-        // addMove({key: pit.key, seeds: 0}, pit.seeds);
-        // // !!! NOTE: Object.assign({}, this.state) makes shallow copy, make changes on nested object will not change value in state
-        // // make a deep copy with: JSON.parse/JSON.stringify
-        // setTimeout(() => {
-        //     let startIdx = pit.idx+1;// starting pit to drop seed
-        //     console.log('pitClicked: player=', pit.player, ' clicked:', pit.idx, ' startIdx=', startIdx);
-        //     playTurn(pit.player, startIdx);    
-        // }, 1000);
     }
 
     function emptyPitAndPlay(pitKey){
         let pit = gameStateRef.current[pitKey];
-        addMove({key: pit.key, seeds: 0}, pit.seeds);
+        playSingleMove({key: pit.key, seeds: 0}, pit.seeds);
         // !!! NOTE: Object.assign({}, this.state) makes shallow copy, make changes on nested object will not change value in state
         // make a deep copy with: JSON.parse/JSON.stringify
         setTimeout(() => {
@@ -152,17 +142,15 @@ function Mancala() {
         let myPlayerPitList = playerPitList[playerSide];
         let seedsInHand = gameStateRef.current.seedsInHand;
         console.log('@@@playTurn, side=', playerSide, ' startIdx:',startIdx, ' seedsInHand:', seedsInHand, ' moveList:', moveList.length);
-        // try drop seed 1 by 1 into active player pits(including store)
-        // let idx = startIdx;
         let pit = gameStateRef.current[myPlayerPitList[startIdx]];
-        // pit is a store and belongs to other side, change siide and move to next pit
+        // pit is a store and belongs to other side, change side and move to next pit
         if (pit.isStore && playerSide !== gameStateRef.current.active) {
             playTurn(gameStateRef.current.active, 0);
             return;
         }
 
-        // let inHand = seedsInHand;
-        if (seedsInHand > 0/* && idx < myPlayerPitList.length*/) {
+        // try drop seed 1 by 1 into active player pits(including store)
+        if (seedsInHand > 0) {
             // drop seed if:
             // 1. not a store - any pit
             // 2. a store, and belong to active player
@@ -174,84 +162,39 @@ function Mancala() {
                     seedsInHand--;
                     // add to moveList data
                     // add a seed to the pit/store
-                    addMove({ key: pit.key, seeds: seeds}, seedsInHand);
+                    playSingleMove({ key: pit.key, seeds: seeds}, seedsInHand);
                     // if more seeds in hand, call the function recursively
                     setTimeout(function() {
                         //   console.log(gameState, seeds);
                         if (seedsInHand === 0){//} && seeds > 1) {
-                            if (seeds === 1) {// dropped seed into empty pit -> end turn
-                                   console.log("End of turn"); 
+                            if (seeds === 1) {// dropped last seed into empty pit -> end turn
+                                console.log("End of turn");
+                                let otherPlayer = getOtherPlayer(gameStateRef.current.active);
+                                setGameState({...gameStateRef.current, 
+                                    active: otherPlayer,
+                                    message: `Player ${otherPlayer === PLAYER_1 ? 1 : 2} turn. Select a pit to start.`
+                                });
                             } else {
+                                // pickup all seeds in the pit
                                 emptyPitAndPlay(pit.key);
                             }
-                            // pickup all seeds in the pit
-                            // set pit to 0, and seeds in-hand value
-                            //let seeds = data[pit.key].seeds;// seeds in in-hand
-                            //addMove({ key: pit.key, seeds: 0}, seeds);
-                            // setTimeout(() => {
-                            //     startIdx +=1;
-                            //     if(gameStateRef.current[pit.key].isStore && gameStateRef.current.active !== gameStateRef.current[pit.key].player) {
-                            //         playerSide = getOtherPlayer();// change side
-                            //         startIdx = 0;// start on first pit
-                            //     }
-                            //    playTurn(playerSide, startIdx)
-                            // }, 1000);
                         } else if (seedsInHand > 0){
                             startIdx++;
                             if(startIdx > MAX_PITS) {
                                 startIdx = 0;
                                 playerSide = getOtherPlayer(pit.player);
                             }
-                            // seedsInHand--;
                             playTurn(playerSide, startIdx);
                         } else {
                             console.log('???? condition?');
                         }
                     }, 1000);
-
                 // console.log('-> place seed:', seedsInHand, ' pit:', pit, ' moveList:', this.moveList[this.moveList.length-1]);
-                }
-                // when seeds in-hand are empty and pit in on active plater side,
-                // pickup all seeds from current pit again 
-                // if (seedsInHand === 0 && pit.player === gameState.active) {
-                //     seedsInHand = pit.seeds;
-                //     pit.seeds = 0;
-                //     // add to moveList data
-                //     addMove(pit.key, pit.seeds, seedsInHand);
-                //     console.log('-> pickup seed:', seedsInHand);
-                //     setTimeout(()=> {
-                //         playTurn(gameState.active, startIdx);
-                //     }, 1000);  
-                // }
-                //startIdx++;
-            // }, 1000);
-        }
+                }        }
         else {
             console.log('@@@@ no more seeds');
         }
-        // dropped alll seeds, then pickup all seeds in the pit
-        // if (inHand === 0 && pit.seeds > 0 && !pit.isStore) {
-        //     console.log('pickup all seeds from pit');
-        //     addMove(pit.key, 0, pit.seeds);
-        //     setTimeout(()=> {
-        //         //idx++;
-        //         // if(idx >= myPlayerPitList.length) {
-        //         //     idx = 0;
-        //         //     playerSide = getOtherPlayer();
-        //         // }
-        //         playTurn(playerSide, idx);
-        //     }, 1000);
-        // }
         console.log('-> at end of pits: in-hand', seedsInHand, ' next idx:', startIdx);
-     
-        // still have seeds in-hand, play other side of pits
-        // if (seedsInHand > 0) {
-        //     const otherPlayer = getOtherPlayer();
-        //     console.log('    switch side:', ' side:', otherPlayer, ' seedsInHand=', seedsInHand, );
-        //     //start at first pit when switch side, counter clockwise
-        // //    playTurn(otherPlayer, 0);
-        // }
-        //showMoves();
     }
 
     // shouldComponentUpdate(prevProps, prevState) {
@@ -288,7 +231,7 @@ function Mancala() {
         return (<div>
             <div id="mancala-game">
                 <div className="message player1">Message:{gameState.message}</div>
-                <div className="holding-area  player1">Player 2(Computer):In-Hand:{PLAYER_2 === gameState.active ? gameState.seedsInHand: ''}</div>
+                <div className="holding-area  player1">Player 2:In-Hand:{PLAYER_2 === gameState.active ? gameState.seedsInHand: ''}</div>
                 <div>
                     <Store config={gameState[store2Key]}/>
                     <div className="pit-container">
