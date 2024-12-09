@@ -30,10 +30,15 @@ function Mancala() {
     
     initPlayerData(PLAYER_1);
     initPlayerData(PLAYER_2);
+    
     // build the initial state data first, then call useState, otherwise too much rendering
     let [gameState, setGameState] = useState(initialData);
     // useRef fixes the stale state issue caused by the closure/timeout, and multiple state updates
     let gameStateRef = useRef(gameState);
+    // update ref
+    useEffect(() => {
+        gameStateRef.current = gameState;  // Keep the ref updated with the latest state
+    }, [gameState]);
 
     // initialize pit data and add to state
     function initPlayerData(playerId){
@@ -210,9 +215,6 @@ function Mancala() {
         player2UI.reverse();
         const store1Key = p1pit[i];
         const store2Key = p2pit[i];
-        useEffect(() => {
-            gameStateRef.current = gameState;  // Keep the ref updated with the latest state
-          }, [gameState]);
         // console.log('render', store1Key, this.state[store1Key]);
         // pit order goes counter clockwise, need to reverse the other side
         return (<div>
