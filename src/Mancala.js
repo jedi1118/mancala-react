@@ -217,8 +217,11 @@ function Mancala() {
         // pit order goes counter clockwise, need to reverse the other side
         return (<div>
             <div id="mancala-game">
-                <div className="message player1">Message:{gameState.message}</div>
-                <div className="holding-area  player1">Player 2:In-Hand:{PLAYER_2 === gameState.active ? gameState.seedsInHand: ''}</div>
+                <div className="player1 info">
+                    <div className="message">Message:<br/>{gameState.message}</div>
+                    <div className="holding-area">In-Hand:{PLAYER_2 === gameState.active ? gameState.seedsInHand: ''}</div>    
+                </div>            
+                <div className="player1 label"><div>Player 2</div></div>
                 <div>
                     <Store config={gameState[store2Key]}/>
                     <div className="pit-container">
@@ -237,8 +240,11 @@ function Mancala() {
                     </div>
                     <Store config={gameState[store1Key]}/>
                 </div>
-                <div className="holding-area player0">Player 1: In-Hand:{PLAYER_1 === gameState.active ? gameState.seedsInHand: ''}</div>
-                <div className="message player0">Message:{gameState.message}</div>
+                <div className="player0 label"><div>Player 1</div></div>
+                <div className="player0 info">
+                    <div className="holding-area">In-Hand:{PLAYER_1 === gameState.active ? gameState.seedsInHand: ''}</div>
+                    <div className="message">Message:<br/>{gameState.message}</div>
+                </div>
             </div>
         </div>
     )

@@ -18,3 +18,29 @@ ul {
     margin: 0;
     /* display: inline; */
 }
+.player0.info, .player1.info{
+    height: 150px;
+    margin: 3px;
+}
+.message {
+
+    height: 100%;
+    display: inline-block;
+    float: left;
+}
+.holding-area {
+
+    height: 100%;
+    display: inline-block;
+}
+.label {
+    display: block;
+    clear: both;
+}
+.label div {
+    height: 50px;
+    font-size: 2rem;
+}
+.info > div {
+    width: calc(50% - 6px);
+}
