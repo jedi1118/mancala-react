@@ -19,7 +19,7 @@ function Pit({config, click}) {
     // }
     return (
         <li className={`pit player${config.player}`}>
-            <div id={config.key} onClick={() =>{click(config)}}>{config.seeds}</div>
+            <div id={config.key} onClick={() =>{click(config)}}>{config.seeds}<span>{config.key}</span></div>
         </li>
     );
 }
